@@ -1,11 +1,11 @@
-FROM alpine:latest
+FROM node:lts-alpine3.10
 
-RUN apk add --no-cache php7
-
-COPY src/ /app
+COPY . /app
 
 WORKDIR "/app"
 
-RUN chmod +x hello.php
+ENV NODE_ENV="development"
 
-CMD ["php", "hello.php"];
+RUN npm install
+
+CMD ["node", "index.js"];
