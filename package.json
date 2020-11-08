@@ -1,24 +1,24 @@
 {
-    "name": "unifi-password-rotator",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/ultimatemonty/unifi-wifi-password-rotator.git"
-    },
-    "author": "Chris McCuller <chris.mcculler@gmail.com>",
-    "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/ultimatemonty/unifi-wifi-password-rotator/issues"
-    },
-    "homepage": "https://github.com/ultimatemonty/unifi-wifi-password-rotator#readme",
-    "dependencies": {
-        "node-unifi": "1.3.8",
-        "dotenv": "8.2.0",
-        "xkpasswd": "1.0.5"
-    }
+  "name": "unifi-password-rotator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ultimatemonty/unifi-wifi-password-rotator.git"
+  },
+  "author": "Chris McCuller <chris.mcculler@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ultimatemonty/unifi-wifi-password-rotator/issues"
+  },
+  "homepage": "https://github.com/ultimatemonty/unifi-wifi-password-rotator#readme",
+  "dependencies": {
+    "node-unifi": "1.3.8",
+    "dotenv": "8.2.0",
+    "xkpasswd": "1.0.5"
   }
+}
