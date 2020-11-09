@@ -1,5 +1,6 @@
 const unifi = require('node-unifi');
 const xkpasswd = require('xkpasswd');
+const nodemailer = require('nodemailer');
 const NODE_ENV = process.env.NODE_ENV;
 if (NODE_ENV !== 'production') {
     require('dotenv').config({ path: `.env.${NODE_ENV}` });
@@ -12,7 +13,14 @@ const config = {
   port: process.env.UNIFI_HOST_PORT || 8443,
   site: process.env.UNIFI_SITE_NAME || 'default',
   wlan: process.env.UNIFI_WLAN_SSID,
-  clients: process.env.UNIFI_CLIENTS.split(',')
+  clients: process.env.UNIFI_CLIENTS.split(','),
+  smtpHost: process.env.SMTP_HOST,
+  smtpPort: process.env.SMTP_PORT,
+  smtpUsername: process.env.SMTP_USERNAME,
+  smtpPassword: process.env.SMTP_PASSWORD,
+  emailFrom: process.env.NOTIFY_EMAIL_FROM,
+  emailTo: process.env.NOTIFY_EMAIL_TO.split(','),
+  emailReplyTo: process.env.NOTIFY_EMAIL_REPLY_TO
 }
 
 var controller = new unifi.Controller(config.host, config.port);
@@ -54,9 +62,41 @@ controller.login(config.username, config.password, function(err) {
             return;
           }
         });
-      })
-
+      });
+      
       controller.logout();
+
+      // email new password
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth();
+      const date = d.getDate() < 10 ? `0${d.getDate()}` : d.getDate();
+      const subject = `jmac-kids wifi password for ${year}-${month}-${date}`;
+      const body = `Today's wifi password is <b>${new_password}</b>`;
+
+      const transporter = nodemailer.createTransport({
+        host: config.smtpHost,
+        port: config.smtpPort,
+        secure: true,
+        auth: {
+          user: config.smtpUsername,
+          pass: config.smtpPassword
+        },
+      });
+
+      transporter.sendMail({
+        from: config.emailFrom,
+        to: config.emailTo,
+        replyTo: config.replyTo,
+        subject: subject,
+        html: body
+      }, (err, res) => {
+        if (err) {
+          console.error(`ERROR: ${err}`);
+          return;
+        }
+        console.dir(res);
+      });
     }, new_password);
   });
 });
